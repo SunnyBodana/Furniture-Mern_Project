@@ -133,8 +133,8 @@ The Furniture E-Commerce Platform is a modern, scalable web application that ena
 ## Project Structure
 
 ```
-New folder/
-├── backend/                    # Backend server
+furniture project/
+├── backend/                    # Backend server (Express + MongoDB)
 │   ├── src/
 │   │   ├── config/            # Configuration files
 │   │   │   ├── db.js          # MongoDB connection
@@ -163,56 +163,35 @@ New folder/
 │   │   │   └── asyncHandler.js
 │   │   ├── app.js             # Express app configuration
 │   │   └── server.js          # Server entry point
+│   ├── .env                   # Backend environment variables
 │   ├── .env.example           # Environment variables template
 │   ├── package.json           # Backend dependencies
 │   └── index.js               # Entry point
 │
-├── src/                        # Frontend React application
-│   ├── admincomponents/       # Admin-specific components
-│   │   └── AdminNavbar.jsx
-│   ├── adminpages/            # Admin pages
-│   │   ├── AddProducts.jsx
-│   │   ├── AdminDash.jsx
-│   │   ├── Contacts.jsx
-│   │   ├── Products.jsx
-│   │   └── UserData.jsx
-│   ├── components/            # Reusable components
-│   │   ├── home/             # Home page components
-│   │   │   ├── PopularProduct.jsx
-│   │   │   ├── ProductsonHome.jsx
-│   │   │   ├── TestimonialSection.jsx
-│   │   │   └── WhyChooseSection.jsx
-│   │   ├── ProtectedRoute.jsx
-│   │   ├── Toast.jsx
-│   │   └── ToastContainer.jsx
-│   ├── contexts/              # React contexts
-│   │   └── ToastContext.jsx
-│   ├── pages/                 # Page components
-│   │   ├── Cart.jsx
-│   │   ├── Chair.jsx
-│   │   ├── ContactUs.jsx
-│   │   ├── Home.jsx
-│   │   ├── Login.jsx
-│   │   ├── Oneproduct.jsx
-│   │   ├── Register.jsx
-│   │   ├── Sofa.jsx
-│   │   ├── Table.jsx
-│   │   ├── CancelPayment.jsx
-│   │   └── SuccessPayment.jsx
-│   ├── services/              # API services
-│   │   └── api.js
-│   ├── store/                 # Redux store
-│   │   └── store.js
-│   ├── firebase.js            # Firebase configuration
-│   ├── App.js                 # Main App component
-│   ├── App.css                # Global styles
-│   ├── index.js               # React entry point
-│   └── index.css              # Base styles
+├── frontend/                   # Frontend React application
+│   ├── public/                # Public assets & index.html
+│   ├── src/
+│   │   ├── admincomponents/   # Admin-specific components
+│   │   ├── adminpages/        # Admin pages
+│   │   ├── components/        # Reusable components
+│   │   │   └── home/          # Home page components (Navbar, Hero, etc.)
+│   │   ├── contexts/          # React contexts (ToastContext)
+│   │   ├── pages/             # Page components (Home, Cart, Login, etc.)
+│   │   ├── services/          # API services
+│   │   ├── store/             # Redux store & slices
+│   │   ├── firebase.js        # Firebase configuration
+│   │   ├── App.js             # Main App routing component
+│   │   ├── index.js           # React entry point
+│   │   └── index.css          # Global styling & design system
+│   ├── .env                   # Frontend environment variables
+│   ├── .env.example           # Frontend environment template
+│   ├── package.json           # Frontend dependencies
+│   ├── postcss.config.js      # PostCSS config
+│   └── tailwind.config.js     # Tailwind CSS configuration
 │
-├── .env.example               # Frontend environment template
-├── .gitignore                 # Git ignore rules
-├── package.json               # Frontend dependencies
-├── tailwind.config.js         # Tailwind CSS configuration
+├── .gitignore                 # Root git ignore rules
+└── README.md                  # Project documentation
+```
 ├── postcss.config.js          # PostCSS configuration
 └── README.md                  # This file
 ```
@@ -245,29 +224,30 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd "furniture project/New folder"
+git clone https://github.com/SunnyBodana/Furniture-Mern_Project.git
+cd "furniture project"
 ```
 
 ### 2. Install Frontend Dependencies
 
 ```bash
+cd frontend
 npm install
 ```
 
-This will install all frontend dependencies listed in `package.json`:
-- React and related libraries
-- Redux Toolkit and Redux Persist
+This will install all frontend dependencies:
+- React 19
+- Redux Toolkit & Redux Persist
 - React Router
 - Bootstrap
 - Firebase
 - Stripe.js
-- And other dependencies
+- React Icons
 
 ### 3. Install Backend Dependencies
 
 ```bash
-cd backend
+cd ../backend
 npm install
 ```
 
@@ -406,7 +386,7 @@ The backend server will start on `http://localhost:5000`
 Open a new terminal:
 
 ```bash
-# From project root
+cd frontend
 npm start
 ```
 
@@ -417,6 +397,7 @@ The frontend will start on `http://localhost:3000` and automatically open in you
 #### Build Frontend
 
 ```bash
+cd frontend
 npm run build
 ```
 

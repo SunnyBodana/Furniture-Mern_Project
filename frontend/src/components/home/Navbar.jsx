@@ -73,10 +73,12 @@ export default function Navbar() {
 
     if (isUserMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [isUserMenuOpen]);
 
@@ -196,6 +198,7 @@ export default function Navbar() {
                   className={`navbar-icon-btn ${isUserMenuOpen ? 'active' : ''}`}
                   onClick={handleUserMenuClick}
                   aria-label="User menu"
+                  aria-expanded={isUserMenuOpen}
                 >
                   <img className="navbar-icon" src="/images/user.svg" alt="User" />
                 </button>
@@ -203,77 +206,133 @@ export default function Navbar() {
               
               {isUserMenuOpen && (
                 <div className="user-menu-dropdown" ref={userMenuRef}>
-                  {currentUser ? (
-                    <>
-                      <div className="user-menu-header">
-                        <div className="user-avatar">
-                          <img src="/images/user.svg" alt="User" />
+                  <div className="user-menu-inner">
+                    {currentUser ? (
+                      <>
+                        <div className="user-menu-header">
+                          <div className="user-avatar">
+                            <span>
+                              {username 
+                                ? username.charAt(0).toUpperCase() 
+                                : (currentUser.email ? currentUser.email.charAt(0).toUpperCase() : 'U')}
+                            </span>
+                          </div>
+                          <div className="user-info">
+                            <span className="user-badge">Member</span>
+                            <p className="user-name">{username || currentUser.email?.split('@')[0] || 'User'}</p>
+                            <p className="user-email">{currentUser.email}</p>
+                          </div>
                         </div>
-                        <div className="user-info">
-                          <p className="user-greeting">Hello,</p>
-                          <p className="user-name">{username || currentUser.email?.split('@')[0] || 'User'}</p>
+                        <div className="user-menu-body">
+                          <button 
+                            className="user-menu-nav-item"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              navigate('/cart');
+                            }}
+                          >
+                            <div className="user-menu-nav-icon">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                              </svg>
+                            </div>
+                            <span className="user-menu-nav-label">My Cart</span>
+                            {cart.length > 0 && <span className="user-menu-count-badge">{cart.length}</span>}
+                            <span className="user-menu-arrow">›</span>
+                          </button>
+                          <button 
+                            className="user-menu-nav-item"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              navigate('/contact_us');
+                            }}
+                          >
+                            <div className="user-menu-nav-icon">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                              </svg>
+                            </div>
+                            <span className="user-menu-nav-label">Help & Support</span>
+                            <span className="user-menu-arrow">›</span>
+                          </button>
                         </div>
-                      </div>
-                      <div className="user-menu-items">
-                        <button 
-                          className="user-menu-item"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                            navigate('/cart');
-                          }}
-                        >
-                          <span>My Cart</span>
-                          <span className="user-menu-arrow">→</span>
-                        </button>
-                        <button 
-                          className="user-menu-item"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                          }}
-                        >
-                          <span>My Orders</span>
-                          <span className="user-menu-arrow">→</span>
-                        </button>
-                        <div className="user-menu-divider"></div>
-                        <button 
-                          className="user-menu-item logout-item"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                            handleLogout();
-                          }}
-                        >
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="user-menu-header">
-                        <p className="user-menu-title">Account</p>
-                        <p className="user-menu-subtitle">Sign in to access your account</p>
-                      </div>
-                      <div className="user-menu-items">
-                        <button 
-                          className="user-menu-item primary-item"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                            navigate('/login');
-                          }}
-                        >
-                          <span>Sign In</span>
-                        </button>
-                        <button 
-                          className="user-menu-item secondary-item"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                            navigate('/register');
-                          }}
-                        >
-                          <span>Create Account</span>
-                        </button>
-                      </div>
-                    </>
-                  )}
+                        <div className="user-menu-footer">
+                          <button 
+                            className="user-menu-logout-btn"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              handleLogout();
+                            }}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                            <span>Sign Out</span>
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="user-menu-guest-header">
+                          <div className="guest-icon-pill">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b5d50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                          </div>
+                          <div className="guest-header-text">
+                            <h4 className="user-menu-welcome">Welcome to Furni</h4>
+                            <p className="user-menu-hint">Sign in for orders & faster checkout</p>
+                          </div>
+                        </div>
+                        <div className="user-menu-guest-actions">
+                          <button 
+                            className="user-menu-btn-primary"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              navigate('/login');
+                            }}
+                          >
+                            <span>Sign In</span>
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+                            </svg>
+                          </button>
+                          <button 
+                            className="user-menu-btn-secondary"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              navigate('/register');
+                            }}
+                          >
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
+                            </svg>
+                            <span>Create Account</span>
+                          </button>
+                        </div>
+                        <div className="user-menu-perks">
+                          <div className="user-menu-perk-item">
+                            <span className="perk-bullet">✦</span>
+                            <span>Members save favorite items & cart across visits</span>
+                          </div>
+                        </div>
+                        <div className="user-menu-guest-links">
+                          <button 
+                            className="user-menu-guest-link"
+                            onClick={() => {
+                              setIsUserMenuOpen(false);
+                              navigate('/contact_us');
+                            }}
+                          >
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <span>Help & Customer Support</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               )}
             </li>
