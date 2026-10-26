@@ -64,6 +64,19 @@ app.use('/api/v1/checkout/webhooks/stripe', express.raw({ type: 'application/jso
 // Body parsing middleware (JSON) — applied AFTER the webhook raw parser
 app.use(express.json());
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Furniture Store API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      products: '/api/v1/products',
+    },
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
