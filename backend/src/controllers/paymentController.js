@@ -103,13 +103,18 @@ exports.createCheckoutSession = asyncHandler(async (req, res) => {
     paymentStatus: 'pending',
   });
 
+  // Dynamically determine client URL from request origin or environment variable
+  const clientUrl = req.get('origin') 
+    || process.env.CLIENT_URL 
+    || 'http://localhost:3000';
+
   // Create Stripe checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: lineItems,
     mode: 'payment',
-    success_url: `${process.env.STRIPE_SUCCESS_URL}?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: process.env.STRIPE_CANCEL_URL,
+    success_url: `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${clientUrl}/cancel`,
     customer_email: userEmail,
     metadata: {
       orderId: order._id.toString(),
